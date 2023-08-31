@@ -7,6 +7,7 @@ type Date struct {
 	time.Time
 }
 
+// const dateFormat = "2006-01-02T12:30:30.123456+1200"
 const dateFormat = "2006-01-02"
 
 func (d Date) String() string {

@@ -39,6 +39,8 @@ NOTE: The `make` command in Windows will be `mingw32-make` with MingW. For examp
 
 ## Commands
 
+注意 make 指令由 MinGW 提供，实际名称可能不为“make”，需要到 MinGW 的 bin 目录下查找，通常来说是带有“make”的可执行文件
+
 * `make pre-ui` - Installs the UI dependencies. Only needs to be run once before building the UI for the first time, or if the dependencies are updated
 * `make generate` - Generate Go and UI GraphQL files
 * `make fmt-ui` - Formats the UI source code

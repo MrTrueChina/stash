@@ -66,8 +66,8 @@ ifndef GO_BUILD_TAGS
 endif
 	$(eval BUILD_FLAGS := -mod=vendor -v -tags "$(GO_BUILD_TAGS)" $(GO_BUILD_FLAGS) -ldflags "$(LDFLAGS) $(EXTRA_LDFLAGS)")
 
-# NOTE: the build target still includes netgo because we cannot detect
-# Windows easily from the Makefile.
+# NOTE: the build target still includes netgo because we cannot detect Windows easily from the Makefile.
+# 因为 Makefile 文件里无法判断出是否位于 windows 平台，所以打包时打了 netgo 进去，似乎是因为 go 在 windows 的网络请求和其他平台不一致
 .PHONY: build
 build: build-flags
 build:
@@ -75,8 +75,8 @@ build:
 
 # strips debug symbols from the release build
 .PHONY: build-release
-build-release: EXTRA_LDFLAGS := -s -w
-build-release: GO_BUILD_FLAGS := -trimpath
+build-release: EXTRA_LDFLAGS := -s -w # 禁用调试、禁用警告
+build-release: GO_BUILD_FLAGS := -trimpath # 删除编译路径信息，可以防止编译路径不同导致的文件识别错误（比如两个完全相同版本的包但是因为工程文件夹位置变了被识别为两个不同的包），另外也可以防止别人看到编译的计算机上的路径有一点点的保密作用
 build-release: build
 
 .PHONY: build-release-static

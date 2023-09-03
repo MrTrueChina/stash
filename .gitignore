@@ -64,3 +64,10 @@ node_modules
 dist
 .DS_Store
 /.local
+
+
+####
+# 生成项目的运行内容
+####
+# 测试过程中使用的构建文件夹
+Build/*

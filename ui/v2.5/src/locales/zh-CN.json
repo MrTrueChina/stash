@@ -1145,7 +1145,8 @@
   "updated_at": "更新时间",
   "url": "链接",
   "validation": {
-    "aliases_must_be_unique": "别名必须是唯一的"
+    "aliases_must_be_unique": "别名必须是唯一的",
+    "date_invalid_form": "${path} 必须是以下格式：YYYY-MM-DD HH:mm:SS[.sssssssss]+08:00（毫秒任意、必须东八区）"
   },
   "videos": "视频",
   "view_all": "查看全部",

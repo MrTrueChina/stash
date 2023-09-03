@@ -70,7 +70,10 @@ export const MovieEditPanel: React.FC<IMovieEditPanel> = ({
         name: "date",
         test: (value) => {
           if (!value) return true;
-          if (!value.match(/^\d{4}-\d{2}-\d{2}$/)) return false;
+          // RFC3339 的格式，中间的间隔使用空格，时区由于程序识别有点问题禁止使用 Z 来表示零时区，可以用 +00:00 表示
+          if (!value.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?((\+|-)\d{2}:\d{2})$/)) return false;
+          // 原版的 YYYY-MM-DD 格式校验
+          // if (!value.match(/^\d{4}-\d{2}-\d{2}$/)) return false;
           if (Number.isNaN(Date.parse(value))) return false;
           return true;
         },

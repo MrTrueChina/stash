@@ -57,6 +57,8 @@ NOTE: The `make` command in Windows will be `mingw32-make` with MingW. For examp
 
 ## Local development quickstart
 
+【注意】可能由于环境问题在 windows 中无法正常启动后台（即第三步走不通）此时可以按照后面的发布操作发布一个 windows 版的包出来，发布后的是一个 "stash.exe" 文件，推荐移动到单独的文件夹运行，因为它运行后会产生很多很多其他文件和文件夹。这个 exe 运行后可能打开一个 9999 端口的页面，但是这个包只有后台，所以还需要按照后续步骤运行前端并以前端地址为准。
+
 1. Run `make pre-ui` to install UI dependencies
 2. Run `make generate` to create generated files
 3. In one terminal, run `make server-start` to run the server code
@@ -81,6 +83,8 @@ To start fresh with new configuration:
 4. Follow the "On first launch" steps above
 
 ## Building a release
+
+【警告】在 statigz/server.go 文件里有一段为了在 windows 上运行注释掉的目录检测代码，在发其他平台的正式包时务必解除注释
 
 1. Run `make pre-ui` to install UI dependencies
 2. Run `make generate` to create generated files

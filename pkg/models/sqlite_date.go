@@ -15,7 +15,11 @@ type SQLiteDate struct {
 	Valid  bool
 }
 
-const sqliteDateLayout = "2006-01-02"
+// 改版的时间格式，以原版代码中出现的
+const sqliteDateLayout = "2006-01-02 15:04:05.999999999-07:00"
+
+// // 原版精确到日的时间
+// const sqliteDateLayout = "2006-01-02"
 
 // Scan implements the Scanner interface.
 func (t *SQLiteDate) Scan(value interface{}) error {

@@ -1226,7 +1226,7 @@
   "url": "URL",
   "validation": {
     "aliases_must_be_unique": "aliases must be unique",
-    "date_invalid_form": "${path} must be in YYYY-MM-DD form",
+    "date_invalid_form": "${path} must be in YYYY-MM-DD HH:mm:SS[.ssssssss]+ZZ:ZZ form",
     "required": "${path} is a required field"
   },
   "videos": "Videos",

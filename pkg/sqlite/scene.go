@@ -977,8 +977,17 @@ func (qb *SceneStore) addVideoFilesTable(f *filterBuilder) {
 }
 
 func (qb *SceneStore) Query(ctx context.Context, options models.SceneQueryOptions) (*models.SceneQueryResult, error) {
+	// log.Info("进入方法 pkg.sqlite.Query")
+
+	// 这里是过滤标准
 	sceneFilter := options.SceneFilter
+	// 排序和分页在这里
 	findFilter := options.FindFilter
+
+	// jsonSceneFilter, err := json.Marshal(sceneFilter)
+	// log.Infof("pkg.sqlite.Query.sceneFilter = %v", string(jsonSceneFilter))
+	// jsonFindFilter, err := json.Marshal(findFilter)
+	// log.Infof("pkg.sqlite.Query.findFilter = %v", string(jsonFindFilter))
 
 	if sceneFilter == nil {
 		sceneFilter = &models.SceneFilterType{}
@@ -1028,6 +1037,7 @@ func (qb *SceneStore) Query(ctx context.Context, options models.SceneQueryOption
 		return nil, err
 	}
 
+	// 设置了排序？
 	qb.setSceneSort(&query, findFilter)
 	query.sortAndPagination += getPagination(findFilter)
 

@@ -215,20 +215,28 @@ func getDateWhereClause(column string, modifier models.CriterionModifier, value 
 
 	switch modifier {
 	case models.CriterionModifierIsNull:
+		// log.Info("getDateWhereClause.CriterionModifierIsNull")
 		return fmt.Sprintf("(%s IS NULL OR %s = '' OR %s = '0001-01-01')", column, column, column), nil
 	case models.CriterionModifierNotNull:
+		// log.Info("getDateWhereClause.CriterionModifierNotNull")
 		return fmt.Sprintf("(%s IS NOT NULL AND %s != '' AND %s != '0001-01-01')", column, column, column), nil
 	case models.CriterionModifierEquals:
+		// log.Info("getDateWhereClause.CriterionModifierEquals")
 		return fmt.Sprintf("%s = ?", column), args
 	case models.CriterionModifierNotEquals:
+		// log.Info("getDateWhereClause.CriterionModifierNotEquals")
 		return fmt.Sprintf("%s != ?", column), args
 	case models.CriterionModifierBetween:
+		// log.Info("getDateWhereClause.CriterionModifierBetween")
 		return fmt.Sprintf("%s BETWEEN ? AND ?", column), betweenArgs
 	case models.CriterionModifierNotBetween:
+		// log.Info("getDateWhereClause.CriterionModifierNotBetween")
 		return fmt.Sprintf("%s NOT BETWEEN ? AND ?", column), betweenArgs
 	case models.CriterionModifierLessThan:
+		// log.Info("getDateWhereClause.CriterionModifierLessThan")
 		return fmt.Sprintf("%s < ?", column), args
 	case models.CriterionModifierGreaterThan:
+		// log.Info("getDateWhereClause.CriterionModifierGreaterThan")
 		return fmt.Sprintf("%s > ?", column), args
 	}
 

@@ -563,6 +563,7 @@ func rating5CriterionHandler(c *models.IntCriterionInput, column string, addJoin
 }
 
 func dateCriterionHandler(c *models.DateCriterionInput, column string) criterionHandlerFunc {
+	// log.Infof("执行方法 pkg.sqlite.filter.dateCriterionHandler，c = %v，colum = %v", c, column)
 	return func(ctx context.Context, f *filterBuilder) {
 		if c != nil {
 			clause, args := getDateCriterionWhereClause(column, *c)
@@ -572,6 +573,7 @@ func dateCriterionHandler(c *models.DateCriterionInput, column string) criterion
 }
 
 func timestampCriterionHandler(c *models.TimestampCriterionInput, column string) criterionHandlerFunc {
+	// log.Info("执行方法 pkg.sqlite.filter.timestampCriterionHandler，c = %v，colum = %v", c, column)
 	return func(ctx context.Context, f *filterBuilder) {
 		if c != nil {
 			clause, args := getTimestampCriterionWhereClause(column, *c)

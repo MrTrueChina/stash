@@ -14,6 +14,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/stashapp/stash/pkg/logger"
 )
 
 // Server is a http.Handler that directly serves compressed files from file system to capable agents.
@@ -60,12 +62,13 @@ const (
 // SkipCompressionExt lists file extensions of data that is already compressed.
 var SkipCompressionExt = []string{".gz", ".br", ".gif", ".jpg", ".png", ".webp"}
 
+// 创建一个文件服务器的实例
 // FileServer creates an instance of Server from file system.
 //
 // Typically file system would be an embed.FS.
 //
-//   //go:embed *.png *.br
-//	 var FS embed.FS
+//	  //go:embed *.png *.br
+//		 var FS embed.FS
 //
 // Brotli support is optionally available with brotli.AddEncoding.
 func FileServer(fs fs.ReadDirFS, options ...func(server *Server)) *Server {
@@ -82,6 +85,8 @@ func FileServer(fs fs.ReadDirFS, options ...func(server *Server)) *Server {
 		o(&s)
 	}
 
+	// FIXME: 这里的代码为了在 windows 中可以运行注释掉了，发布其他版本时注意解开（这行注释保留在这里方便以后注掉的时候不用再加）
+	// 此处如果 "." 目录不存在则报错，但是在 windows 里不允许只有一个点的目录
 	// Reading from "." is not expected to fail.
 	if err := s.hashDir("."); err != nil {
 		panic(err)
@@ -156,6 +161,7 @@ func (s *Server) encodeFiles() error {
 func (s *Server) hashDir(p string) error {
 	files, err := s.fs.ReadDir(p)
 	if err != nil {
+		logger.Errorf("读取路径时发生错误，路径 = %v", p)
 		return err
 	}
 
@@ -178,11 +184,13 @@ func (s *Server) hashDir(p string) error {
 
 		f, err := s.fs.Open(fn)
 		if err != nil {
+			logger.Errorf("打开文件时发生错误，路径 = %v", p)
 			return err
 		}
 
 		n, err := io.Copy(h, f)
 		if err != nil {
+			logger.Errorf("复制文件时发生错误，路径 = %v", p)
 			return err
 		}
 

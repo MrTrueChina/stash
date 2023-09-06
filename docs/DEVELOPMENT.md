@@ -1,5 +1,7 @@
 # Building from Source
 
+### 对于 RFC3339 版本，可以优先阅览 DEVELOPMENT-RFC3339.md
+
 ## Pre-requisites
 
 * [Go](https://golang.org/dl/)

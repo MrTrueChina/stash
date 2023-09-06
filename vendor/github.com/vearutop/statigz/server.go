@@ -85,12 +85,13 @@ func FileServer(fs fs.ReadDirFS, options ...func(server *Server)) *Server {
 		o(&s)
 	}
 
-	// FIXME: 这里的代码为了在 windows 中可以运行注释掉了，发布其他版本时注意解开（这行注释保留在这里方便以后注掉的时候不用再加）
-	// 此处如果 "." 目录不存在则报错，但是在 windows 里不允许只有一个点的目录
-	// Reading from "." is not expected to fail.
-	if err := s.hashDir("."); err != nil {
-		panic(err)
-	}
+	// // 此处代码无法理解而且导致报错，他要求 "." 目录存在否则就报错
+	// // 但从最严重的角度说 windows 根本不允许一个目录叫做 "."，这违反了 windows 的路径命名规则
+	// // 其次 Linux 和 IOS/MacOS 虽然可以有交 "." 的路径但是这也严重违反了他们的路径习惯，因为他们的 "." 通常来说表示"当前路径"
+	// // Reading from "." is not expected to fail.
+	// if err := s.hashDir("."); err != nil {
+	// 	panic(err)
+	// }
 
 	if s.EncodeOnInit {
 		err := s.encodeFiles()

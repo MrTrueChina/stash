@@ -100,7 +100,9 @@ type SetupInput struct {
 	GeneratedLocation string `json:"generatedLocation"`
 	// Empty to indicate default
 	CacheLocation string `json:"cacheLocation"`
-	// Empty to indicate database storage for blobs
+
+	StoreBlobsInDatabase bool `json:"storeBlobsInDatabase"`
+	// Empty to indicate default
 	BlobsLocation string `json:"blobsLocation"`
 }
 
@@ -192,7 +194,7 @@ func initialize() error {
 	instance.SceneService = &scene.Service{
 		File:             db.File,
 		Repository:       db.Scene,
-		MarkerRepository: instance.Repository.SceneMarker,
+		MarkerRepository: db.SceneMarker,
 		PluginCache:      instance.PluginCache,
 		Paths:            instance.Paths,
 		Config:           cfg,
@@ -279,11 +281,11 @@ func initialize() error {
 }
 
 func videoFileFilter(ctx context.Context, f file.File) bool {
-	return isVideo(f.Base().Basename)
+	return useAsVideo(f.Base().Path)
 }
 
 func imageFileFilter(ctx context.Context, f file.File) bool {
-	return isImage(f.Base().Basename)
+	return useAsImage(f.Base().Path)
 }
 
 func galleryFileFilter(ctx context.Context, f file.File) bool {
@@ -306,8 +308,10 @@ func makeScanner(db *sqlite.Database, pluginCache *plugin.Cache) *file.Scanner {
 				Filter: file.FilterFunc(videoFileFilter),
 			},
 			&file.FilteredDecorator{
-				Decorator: &file_image.Decorator{},
-				Filter:    file.FilterFunc(imageFileFilter),
+				Decorator: &file_image.Decorator{
+					FFProbe: instance.FFProbe,
+				},
+				Filter: file.FilterFunc(imageFileFilter),
 			},
 		},
 		FingerprintCalculator: &fingerprintCalculator{instance.Config},
@@ -594,6 +598,10 @@ func setSetupDefaults(input *SetupInput) {
 	if input.DatabaseFile == "" {
 		input.DatabaseFile = filepath.Join(configDir, "stash-go.sqlite")
 	}
+
+	if input.BlobsLocation == "" {
+		input.BlobsLocation = filepath.Join(configDir, "blobs")
+	}
 }
 
 func (s *Manager) Setup(ctx context.Context, input SetupInput) error {
@@ -646,20 +654,20 @@ func (s *Manager) Setup(ctx context.Context, input SetupInput) error {
 		s.Config.Set(config.Cache, input.CacheLocation)
 	}
 
-	// if blobs path was provided then use filesystem based blob storage
-	if input.BlobsLocation != "" {
+	if input.StoreBlobsInDatabase {
+		s.Config.Set(config.BlobsStorage, config.BlobStorageTypeDatabase)
+	} else {
 		if !c.HasOverride(config.BlobsPath) {
 			if exists, _ := fsutil.DirExists(input.BlobsLocation); !exists {
 				if err := os.MkdirAll(input.BlobsLocation, 0755); err != nil {
 					return fmt.Errorf("error creating blobs directory: %v", err)
 				}
 			}
+
+			s.Config.Set(config.BlobsPath, input.BlobsLocation)
 		}
 
-		s.Config.Set(config.BlobsPath, input.BlobsLocation)
 		s.Config.Set(config.BlobsStorage, config.BlobStorageTypeFilesystem)
-	} else {
-		s.Config.Set(config.BlobsStorage, config.BlobStorageTypeDatabase)
 	}
 
 	// set the configuration

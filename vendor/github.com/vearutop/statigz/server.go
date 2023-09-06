@@ -14,8 +14,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/stashapp/stash/pkg/logger"
 )
 
 // Server is a http.Handler that directly serves compressed files from file system to capable agents.
@@ -62,13 +60,12 @@ const (
 // SkipCompressionExt lists file extensions of data that is already compressed.
 var SkipCompressionExt = []string{".gz", ".br", ".gif", ".jpg", ".png", ".webp"}
 
-// 创建一个文件服务器的实例
 // FileServer creates an instance of Server from file system.
 //
 // Typically file system would be an embed.FS.
 //
-//	  //go:embed *.png *.br
-//		 var FS embed.FS
+//   //go:embed *.png *.br
+//	 var FS embed.FS
 //
 // Brotli support is optionally available with brotli.AddEncoding.
 func FileServer(fs fs.ReadDirFS, options ...func(server *Server)) *Server {
@@ -85,13 +82,10 @@ func FileServer(fs fs.ReadDirFS, options ...func(server *Server)) *Server {
 		o(&s)
 	}
 
-	// // 此处代码无法理解而且导致报错，他要求 "." 目录存在否则就报错
-	// // 但从最严重的角度说 windows 根本不允许一个目录叫做 "."，这违反了 windows 的路径命名规则
-	// // 其次 Linux 和 IOS/MacOS 虽然可以有交 "." 的路径但是这也严重违反了他们的路径习惯，因为他们的 "." 通常来说表示"当前路径"
-	// // Reading from "." is not expected to fail.
-	// if err := s.hashDir("."); err != nil {
-	// 	panic(err)
-	// }
+	// Reading from "." is not expected to fail.
+	if err := s.hashDir("."); err != nil {
+		panic(err)
+	}
 
 	if s.EncodeOnInit {
 		err := s.encodeFiles()
@@ -162,7 +156,6 @@ func (s *Server) encodeFiles() error {
 func (s *Server) hashDir(p string) error {
 	files, err := s.fs.ReadDir(p)
 	if err != nil {
-		logger.Errorf("读取路径时发生错误，路径 = %v", p)
 		return err
 	}
 
@@ -185,13 +178,11 @@ func (s *Server) hashDir(p string) error {
 
 		f, err := s.fs.Open(fn)
 		if err != nil {
-			logger.Errorf("打开文件时发生错误，路径 = %v", p)
 			return err
 		}
 
 		n, err := io.Copy(h, f)
 		if err != nil {
-			logger.Errorf("复制文件时发生错误，路径 = %v", p)
 			return err
 		}
 

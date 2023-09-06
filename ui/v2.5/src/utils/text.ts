@@ -157,15 +157,15 @@ const fileSizeFractionalDigits = (unit: Unit) => {
 };
 
 const secondsToTimestamp = (seconds: number) => {
-  let ret = new Date(seconds * 1000).toISOString().substr(11, 8);
+  let ret = new Date(seconds * 1000).toISOString().substring(11, 19);
 
   if (ret.startsWith("00")) {
     // strip hours if under one hour
-    ret = ret.substr(3);
+    ret = ret.substring(3);
   }
   if (ret.startsWith("0")) {
     // for duration under a minute, leave one leading zero
-    ret = ret.substr(1);
+    ret = ret.substring(1);
   }
   return ret;
 };
@@ -280,20 +280,23 @@ const bitRate = (bitrate: number) => {
 
 const resolution = (width: number, height: number) => {
   const number = width > height ? height : width;
-  if (number >= 4320) {
+  if (number >= 6144) {
+    return "HUGE";
+  }
+  if (number >= 3840) {
     return "8K";
   }
-  if (number >= 3384) {
+  if (number >= 3584) {
+    return "7K";
+  }
+  if (number >= 3000) {
     return "6K";
   }
-  if (number >= 2880) {
+  if (number >= 2560) {
     return "5K";
   }
-  if (number >= 2160) {
-    return "4K";
-  }
   if (number >= 1920) {
-    return "1920p";
+    return "4K";
   }
   if (number >= 1440) {
     return "1440p";
@@ -384,11 +387,6 @@ const formatDateTime = (intl: IntlShape, dateTime?: string, utc = false) =>
     timeZone: utc ? "utc" : undefined,
   })}`;
 
-const capitalize = (val: string) =>
-  val
-    .replace(/^[-_]*(.)/, (_, c) => c.toUpperCase())
-    .replace(/[-_]+(.)/g, (_, c) => ` ${c.toUpperCase()}`);
-
 type CountUnit = "" | "K" | "M" | "B";
 const CountUnits: CountUnit[] = ["", "K", "M", "B"];
 
@@ -432,7 +430,6 @@ const TextUtils = {
   instagramURL,
   formatDate,
   formatDateTime,
-  capitalize,
   secondsAsTimeString,
   abbreviateCounter,
 };

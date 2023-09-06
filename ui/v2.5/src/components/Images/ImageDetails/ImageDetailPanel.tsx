@@ -97,12 +97,11 @@ export const ImageDetailPanel: React.FC<IImageDetailProps> = (props) => {
           </div>
           {props.image.date ? (
             <h5>
-              {/* <FormattedDate
+              <FormattedDate
                 value={props.image.date}
                 format="long"
                 timeZone="utc"
-              /> */}
-              {TextUtils.formatDateTime(intl, props.image.date)}{" "}
+              />
             </h5>
           ) : undefined}
           {props.image.rating100 ? (

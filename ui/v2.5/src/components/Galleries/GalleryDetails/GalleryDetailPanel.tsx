@@ -88,12 +88,11 @@ export const GalleryDetailPanel: React.FC<IGalleryDetailProps> = ({
           </h3>
           {gallery.date ? (
             <h5>
-              {/* <FormattedDate
+              <FormattedDate
                 value={gallery.date}
                 format="long"
                 timeZone="utc"
-              /> */}
-              {TextUtils.formatDateTime(intl, gallery.date)}{" "}
+              />
             </h5>
           ) : undefined}
           {gallery.rating100 ? (

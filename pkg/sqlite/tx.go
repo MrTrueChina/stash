@@ -64,6 +64,9 @@ func (*dbWrapper) Select(ctx context.Context, dest interface{}, query string, ar
 		return sqlError(err, query, args...)
 	}
 
+	// // 输出 tx 对象的类型
+	// log.Infof("pkg.sqlite.tx.go - Select.tx.type = %v", reflect.TypeOf(tx))
+
 	start := time.Now()
 	err = tx.Select(dest, query, args...)
 	logSQL(start, query, args...)

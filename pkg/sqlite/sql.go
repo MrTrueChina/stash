@@ -214,20 +214,28 @@ func getNumericWhereClause(column string, modifier models.CriterionModifier, arg
 
 	switch modifier {
 	case models.CriterionModifierIsNull:
+		// log.Info("getDateWhereClause.CriterionModifierIsNull")
 		return fmt.Sprintf("%s IS NULL", column), nil
 	case models.CriterionModifierNotNull:
+		// log.Info("getDateWhereClause.CriterionModifierNotNull")
 		return fmt.Sprintf("%s IS NOT NULL", column), nil
 	case models.CriterionModifierEquals:
+		// log.Info("getDateWhereClause.CriterionModifierEquals")
 		return fmt.Sprintf("%s = ?", column), singleArgs
 	case models.CriterionModifierNotEquals:
+		// log.Info("getDateWhereClause.CriterionModifierNotEquals")
 		return fmt.Sprintf("%s != ?", column), singleArgs
 	case models.CriterionModifierBetween:
+		// log.Info("getDateWhereClause.CriterionModifierBetween")
 		return fmt.Sprintf("%s BETWEEN ? AND ?", column), args
 	case models.CriterionModifierNotBetween:
+		// log.Info("getDateWhereClause.CriterionModifierNotBetween")
 		return fmt.Sprintf("%s NOT BETWEEN ? AND ?", column), args
 	case models.CriterionModifierLessThan:
+		// log.Info("getDateWhereClause.CriterionModifierLessThan")
 		return fmt.Sprintf("%s < ?", column), singleArgs
 	case models.CriterionModifierGreaterThan:
+		// log.Info("getDateWhereClause.CriterionModifierGreaterThan")
 		return fmt.Sprintf("%s > ?", column), singleArgs
 	}
 

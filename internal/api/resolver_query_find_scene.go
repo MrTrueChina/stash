@@ -74,7 +74,21 @@ func (r *queryResolver) FindSceneByHash(ctx context.Context, input SceneHashInpu
 	return scene, nil
 }
 
+// filter 这个参数是排序的，sceneFilter 是过滤的
 func (r *queryResolver) FindScenes(ctx context.Context, sceneFilter *models.SceneFilterType, sceneIDs []int, filter *models.FindFilterType) (ret *FindScenesResultType, err error) {
+	// jsonCtx, err := json.Marshal(ctx)
+	// log.Infof("FindScenes 方法内，ctx = %v", string(jsonCtx))
+	// log.Info(ctx)
+	// log.Info(string(jsonCtx))
+
+	// jsonSceneFilter, err := json.Marshal(sceneFilter)
+	// log.Infof("FindScenes 方法内，sceneFilter = %v", string(jsonSceneFilter))
+
+	// jsonFilter, err := json.Marshal(filter)
+	// log.Infof("FindScenes 方法内，filter = %v", string(jsonFilter))
+
+	// log.Infof("FindScenes 方法内，sceneIDs = %v", sceneIDs)
+
 	if err := r.withReadTxn(ctx, func(ctx context.Context) error {
 		var scenes []*models.Scene
 		var err error
@@ -82,8 +96,15 @@ func (r *queryResolver) FindScenes(ctx context.Context, sceneFilter *models.Scen
 		fields := graphql.CollectAllFields(ctx)
 		result := &models.SceneQueryResult{}
 
+		// log.Infof("FindScenes 第一层，fields = %v", fields)
+		// log.Infof("FindScenes 第一层，result = %v", result)
+
 		if len(sceneIDs) > 0 {
+			// log.Info("FindScenes，有场景 ID")
+
 			scenes, err = r.repository.Scene.FindMany(ctx, sceneIDs)
+			// log.Infof("FindScenes 有场景，scenes = %v", scenes)
+
 			if err == nil {
 				result.Count = len(scenes)
 				for _, s := range scenes {
@@ -102,6 +123,11 @@ func (r *queryResolver) FindScenes(ctx context.Context, sceneFilter *models.Scen
 				}
 			}
 		} else {
+			// log.Info("FindScenes，无场景 ID")
+			// log.Infof("FindScenes 无场景，typeof r = %v", reflect.TypeOf(r))
+			// log.Infof("FindScenes 无场景，typeof r.repository = %v", reflect.TypeOf(r.repository))
+			// log.Infof("FindScenes 无场景，typeof r.repository.Scene = %v", reflect.TypeOf(r.repository.Scene))
+
 			result, err = r.repository.Scene.Query(ctx, models.SceneQueryOptions{
 				QueryOptions: models.QueryOptions{
 					FindFilter: filter,
@@ -111,6 +137,9 @@ func (r *queryResolver) FindScenes(ctx context.Context, sceneFilter *models.Scen
 				TotalDuration: stringslice.StrInclude(fields, "duration"),
 				TotalSize:     stringslice.StrInclude(fields, "filesize"),
 			})
+			// jsonStr, err := json.Marshal(result)
+			// log.Infof("FindScenes 无场景，result = %v", string(jsonStr))
+
 			if err == nil {
 				scenes, err = result.Resolve(ctx)
 			}

@@ -1099,6 +1099,7 @@ func (qb *SceneStore) makeQuery(ctx context.Context, sceneFilter *models.SceneFi
 		return nil, err
 	}
 
+	// 设置了排序？
 	qb.setSceneSort(&query, findFilter)
 	query.sortAndPagination += getPagination(findFilter)
 
@@ -1106,6 +1107,16 @@ func (qb *SceneStore) makeQuery(ctx context.Context, sceneFilter *models.SceneFi
 }
 
 func (qb *SceneStore) Query(ctx context.Context, options models.SceneQueryOptions) (*models.SceneQueryResult, error) {
+	// log.Info("进入方法 pkg.sqlite.Query")
+
+	// // 输出两个过滤参数的内容
+	// jsonSceneFilter, err := json.Marshal(sceneFilter)
+	// log.Infof("pkg.sqlite.Query.sceneFilter = %v", string(jsonSceneFilter))
+	// jsonFindFilter, err := json.Marshal(findFilter)
+	// log.Infof("pkg.sqlite.Query.findFilter = %v", string(jsonFindFilter))
+
+	// options.SceneFilter 是过滤标准
+	// options.FindFilter 是排序和分页在
 	query, err := qb.makeQuery(ctx, options.SceneFilter, options.FindFilter)
 	if err != nil {
 		return nil, err

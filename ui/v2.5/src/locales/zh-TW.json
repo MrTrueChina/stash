@@ -1162,7 +1162,8 @@
   "updated_at": "更新於",
   "url": "連結",
   "validation": {
-    "aliases_must_be_unique": "別名不可重複"
+    "aliases_must_be_unique": "別名不可重複",
+    "date_invalid_form": "${path} 必須是以下格式：YYYY-MM-DD HH:mm:SS[.sssssssss]+08:00（毫秒任意、必須東八區）"
   },
   "videos": "影片",
   "view_all": "顯示全部",

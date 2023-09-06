@@ -7,7 +7,11 @@ import (
 	"github.com/stashapp/stash/pkg/models"
 )
 
-const sqliteDateLayout = "2006-01-02"
+// 改版的时间格式，以原版代码中出现的那一串为准，但修改时区为东八区
+const sqliteDateLayout = "2006-01-02 15:04:05.999999999+08:00"
+
+// // 原版精确到日的时间
+// const sqliteDateLayout = "2006-01-02"
 
 // Date represents a date stored as "YYYY-MM-DD"
 type Date struct {

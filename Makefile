@@ -276,6 +276,7 @@ else
 	@touch ui/v2.5/build/index.html
 endif
 
+# 重新生成 GraphQL 的文件
 # Regenerates GraphQL files
 .PHONY: generate
 generate: generate-backend generate-ui
@@ -342,7 +343,9 @@ server-clean:
 # dependencies have changed
 .PHONY: pre-ui
 pre-ui:
-	cd ui/v2.5 && yarn install --frozen-lockfile
+#   原版有一个对相关所需包的锁定设置（使用指定的前置包而不是最新的），但是这个设置会导致编译失败，所以先关掉
+#	cd ui/v2.5 && yarn install --frozen-lockfile
+	cd ui/v2.5 && yarn install
 
 .PHONY: ui-env
 ui-env: build-info

@@ -1341,7 +1341,7 @@
   "urls": "URLs",
   "validation": {
     "aliases_must_be_unique": "aliases must be unique",
-    "date_invalid_form": "${path} must be in YYYY-MM-DD form",
+    "date_invalid_form": "${path} must be in YYYY-MM-DD HH:mm:SS[.sssssssss]+08:00 from",
     "required": "${path} is a required field",
     "urls_must_be_unique": "URLs must be unique"
   },

@@ -87,7 +87,10 @@ export const GalleryEditPanel: React.FC<IProps> = ({
         name: "date",
         test: (value) => {
           if (!value) return true;
-          if (!value.match(/^\d{4}-\d{2}-\d{2}$/)) return false;
+          // RFC3339 的格式，中间的间隔使用空格，时区由于程序支持的问题强制为东八区（SQLite 没有真正的时间戳也就无法正确理解时区，或者说可以让他理解，但得从底层设计一个转换）
+          if (!value.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?\+08:00$/)) return false;
+          // 原版的 YYYY-MM-DD 格式校验
+          // if (!value.match(/^\d{4}-\d{2}-\d{2}$/)) return false;
           if (Number.isNaN(Date.parse(value))) return false;
           return true;
         },

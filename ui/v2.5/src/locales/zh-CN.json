@@ -1240,7 +1240,7 @@
   "url": "链接",
   "validation": {
     "aliases_must_be_unique": "别名必须是唯一的",
-    "date_invalid_form": "${path} 的格式必须为 YYYY-MM-DD",
+    "date_invalid_form": "${path} 必须是以下格式：YYYY-MM-DD HH:mm:SS[.sssssssss]+08:00（毫秒任意、必须东八区）",
     "required": "${path} 是必填字段"
   },
   "videos": "视频",

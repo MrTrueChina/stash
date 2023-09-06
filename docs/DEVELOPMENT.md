@@ -38,6 +38,8 @@ NOTE: The `make` command in Windows will be `mingw32-make` with MinGW. For examp
 
 ## Commands
 
+注意 make 指令由 MinGW 提供，实际名称可能不为“make”，需要到 MinGW 的 bin 目录下查找，通常来说是带有“make”的可执行文件
+
 * `make pre-ui` - Installs the UI dependencies. This only needs to be run once after cloning the repository, or if the dependencies are updated.
 * `make generate` - Generates Go and UI GraphQL files. Requires `make pre-ui` to have been run.
 * `make generate-stash-box-client` - Generate Go files for the Stash-box client code.
@@ -60,6 +62,8 @@ NOTE: The `make` command in Windows will be `mingw32-make` with MinGW. For examp
 * `make ui-start` - Runs the UI in development mode. Requires a running Stash server to connect to. The server port can be changed from the default of `9999` using the environment variable `VITE_APP_PLATFORM_PORT`. The UI runs on port `3000` or the next available port.
 
 ## Local development quickstart
+
+【注意】可能由于环境问题在 windows 中无法正常启动后台（即第三步走不通）此时可以按照后面的发布操作发布一个 windows 版的包出来，发布后的是一个 "stash.exe" 文件，推荐移动到单独的文件夹运行，因为它运行后会产生很多很多其他文件和文件夹。这个 exe 运行后可能打开一个 9999 端口的页面，但是这个包只有后台，所以还需要按照后续步骤运行前端并以前端地址为准。
 
 1. Run `make pre-ui` to install UI dependencies
 2. Run `make generate` to create generated files
@@ -87,6 +91,8 @@ To start fresh with new configuration:
 4. Follow the "On first launch" steps above
 
 ## Building a release
+
+【警告】在 statigz/server.go 文件里有一段为了在 windows 上运行注释掉的目录检测代码，在发其他平台的正式包时务必解除注释
 
 Simply run `make` or `make release`, or equivalently:
 

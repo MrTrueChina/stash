@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"github.com/stashapp/stash/pkg/logger"
 )
 
 // Server is a http.Handler that directly serves compressed files from file system to capable agents.
@@ -60,6 +61,7 @@ const (
 // SkipCompressionExt lists file extensions of data that is already compressed.
 var SkipCompressionExt = []string{".gz", ".br", ".gif", ".jpg", ".png", ".webp"}
 
+// 创建一个文件服务器的实例
 // FileServer creates an instance of Server from file system.
 //
 // Typically file system would be an embed.FS.
@@ -82,6 +84,8 @@ func FileServer(fs fs.ReadDirFS, options ...func(server *Server)) *Server {
 		o(&s)
 	}
 
+	// FIXME: 此处代码会导致 windows 报错，因为 windows 根本不允许路径叫做"."，在使用 windows 测试时如果此处发生错误直接注释掉，编译时再打开即可
+	// Linux 和 IOS/MacOS 虽然允许"."路径但是也可能产生混淆，因为他们也将"."视为当前目录
 	// Reading from "." is not expected to fail.
 	if err := s.hashDir("."); err != nil {
 		panic(err)
@@ -156,6 +160,7 @@ func (s *Server) encodeFiles() error {
 func (s *Server) hashDir(p string) error {
 	files, err := s.fs.ReadDir(p)
 	if err != nil {
+		logger.Errorf("读取路径时发生错误，路径 = %v", p)
 		return err
 	}
 
@@ -178,11 +183,13 @@ func (s *Server) hashDir(p string) error {
 
 		f, err := s.fs.Open(fn)
 		if err != nil {
+			logger.Errorf("打开文件时发生错误，路径 = %v", p)
 			return err
 		}
 
 		n, err := io.Copy(h, f)
 		if err != nil {
+			logger.Errorf("复制文件时发生错误，路径 = %v", p)
 			return err
 		}
 

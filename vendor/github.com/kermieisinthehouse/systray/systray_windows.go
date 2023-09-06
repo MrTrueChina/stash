@@ -855,6 +855,8 @@ func SetIcon(iconBytes []byte) {
 	}
 	if err := wt.setIcon(iconFilePath); err != nil {
 		log.Printf("Unable to set icon: %v", err)
+		// // 测试图标路径的 Log
+		// log.Printf("iconFilePath: %v", iconFilePath)
 		return
 	}
 }

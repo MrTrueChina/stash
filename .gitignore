@@ -65,3 +65,8 @@ node_modules
 dist
 .DS_Store
 /.local*
+
+###
+# 编译测试内容
+###
+build/*

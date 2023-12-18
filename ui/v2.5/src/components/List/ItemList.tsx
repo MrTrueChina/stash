@@ -121,6 +121,8 @@ const getSelectedData = <I extends IDataItem>(
 ) => data.filter((value) => selectedIds.has(value.id));
 
 /**
+ * 展示列表的工厂方法，包含图片列表在内的内容都在这里产出
+ * 
  * A factory function for ItemList components.
  * IMPORTANT: as the component manipulates the URL query string, if there are
  * ever multiple ItemLists rendered at once, all but one of them need to have

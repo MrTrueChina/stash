@@ -20,7 +20,9 @@ import {
 import { ListFilterOptions, MediaSortByOptions } from "./filter-options";
 import { DisplayMode } from "./types";
 
-const defaultSortBy = "path";
+// 原版的默认排序是路径，但是按照路径排序会导致不同图集里的图片都按照主文件的路径排序，这就导致有的图集里这个图片永远在最前面而有的则永远在最后面
+// 实际上这个问题是系统设计的硬伤无法通过简单的修补解决，这里利用图片很少改名的特性用标题作为排序标准
+const defaultSortBy = "title";
 
 const sortByOptions = [
   "o_counter",

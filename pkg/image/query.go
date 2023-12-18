@@ -117,7 +117,9 @@ func FindGalleryCover(ctx context.Context, r Queryer, galleryID int, galleryCove
 func findGalleryCover(ctx context.Context, r Queryer, galleryID int, useCoverJpg bool, galleryCoverRegex string) (*models.Image, error) {
 	// try to find cover.jpg in the gallery
 	perPage := 1
-	sortBy := "path"
+	// 原版的默认排序是路径，但是按照路径排序会导致不同图集里的图片都按照主文件的路径排序，这就导致有的图集里这个图片永远在最前面而有的则永远在最后面
+	// 实际上这个问题是系统设计的硬伤无法通过简单的修补解决，这里利用图片很少改名的特性用标题作为排序标准
+	sortBy := "title"
 	sortDir := models.SortDirectionEnumAsc
 
 	findFilter := models.FindFilterType{

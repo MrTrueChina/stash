@@ -18,6 +18,7 @@ interface IGalleryDetailsProps {
   gallery: GQL.GalleryDataFragment;
 }
 
+// 显示一个图集内部的图片的界面
 export const GalleryImagesPanel: React.FC<IGalleryDetailsProps> = ({
   active,
   gallery,
@@ -25,6 +26,7 @@ export const GalleryImagesPanel: React.FC<IGalleryDetailsProps> = ({
   const intl = useIntl();
   const Toast = useToast();
 
+  // 似乎是对事件的监听，Stash 里面对此的描述是 "Hook(钩子/挂钩)"
   function filterHook(filter: ListFilterModel) {
     const galleryValue = {
       id: gallery.id!,
@@ -97,6 +99,7 @@ export const GalleryImagesPanel: React.FC<IGalleryDetailsProps> = ({
     },
   ];
 
+  // 最后返回了一个 ImageList，从名字上看是图片列表，可能就是图片显示的那部分，而这个组件估计是包含了外部的各种操作按钮
   return (
     <ImageList
       filterHook={filterHook}

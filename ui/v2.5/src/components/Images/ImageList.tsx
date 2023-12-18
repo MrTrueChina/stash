@@ -113,6 +113,7 @@ interface IImageListImages {
   chapters?: GQL.GalleryChapterDataFragment[];
 }
 
+// 展示图片的组件，展示的图片和搜索条件都从外部传入
 const ImageListImages: React.FC<IImageListImages> = ({
   images,
   filter,
@@ -150,6 +151,7 @@ const ImageListImages: React.FC<IImageListImages> = ({
     [onChangePage, filter.currentPage, pageCount]
   );
 
+  // 关闭操作的回调？
   const handleClose = useCallback(() => {
     setSlideshowRunning(false);
   }, [setSlideshowRunning]);
@@ -245,7 +247,7 @@ const ImageListImages: React.FC<IImageListImages> = ({
 
 const ImageItemList = makeItemList({
   filterMode: GQL.FilterMode.Images,
-  useResult: useFindImages,
+  useResult: useFindImages, 
   getItems(result: GQL.FindImagesQueryResult) {
     return result?.data?.findImages?.images ?? [];
   },
@@ -298,6 +300,7 @@ interface IImageList {
   chapters?: GQL.GalleryChapterDataFragment[];
 }
 
+// 显示图片列表的组件
 export const ImageList: React.FC<IImageList> = ({
   filterHook,
   persistState,
@@ -342,6 +345,7 @@ export const ImageList: React.FC<IImageList> = ({
     };
   }
 
+  // 查看随机一个图片
   async function viewRandom(
     result: GQL.FindImagesQueryResult,
     filter: ListFilterModel
@@ -363,16 +367,19 @@ export const ImageList: React.FC<IImageList> = ({
     }
   }
 
+  // 导出图片事件的处理
   async function onExport() {
     setIsExportAll(false);
     setIsExportDialogOpen(true);
   }
 
+  // 导出全部图片事件的处理
   async function onExportAll() {
     setIsExportAll(true);
     setIsExportDialogOpen(true);
   }
 
+  // 渲染内容
   function renderContent(
     result: GQL.FindImagesQueryResult,
     filter: ListFilterModel,
@@ -397,6 +404,7 @@ export const ImageList: React.FC<IImageList> = ({
       }
     }
 
+    // 渲染图片列表
     function renderImages() {
       if (!result.data?.findImages) return;
 

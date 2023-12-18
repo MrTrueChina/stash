@@ -48,8 +48,10 @@ interface IGalleryParams {
   tab?: string;
 }
 
+// 图集界面
 export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
   const history = useHistory();
+  // 信息弹窗
   const Toast = useToast();
   const intl = useIntl();
   const showLightbox = useGalleryLightbox(gallery.id, gallery.chapters);
@@ -89,6 +91,7 @@ export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
     });
   }
 
+  // 已整理按钮的点击事件的处理
   const onOrganizedClick = async () => {
     try {
       setOrganizedLoading(true);
@@ -111,6 +114,7 @@ export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
     return collapsed ? faChevronRight : faChevronLeft;
   }
 
+  // 重新扫描事件的处理
   async function onRescan() {
     if (!gallery || !path) {
       return;
@@ -131,6 +135,7 @@ export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
     });
   }
 
+  // 点击章节按钮事件的处理
   async function onClickChapter(imageindex: number) {
     showLightbox(imageindex - 1);
   }
@@ -155,6 +160,7 @@ export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
     }
   }
 
+  // 渲染操作下拉框，就是已整理按钮右边的那三个点，包括点击后出现的内容都在这
   function renderOperations() {
     return (
       <Dropdown>
@@ -191,6 +197,7 @@ export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
     );
   }
 
+  // 渲染左侧的标签页
   function renderTabs() {
     if (!gallery) {
       return;
@@ -282,6 +289,7 @@ export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
     );
   }
 
+  // 渲染右侧标签页？右侧应该就是图片列表和新增图片操作那部分
   function renderRightTabs() {
     if (!gallery) {
       return;
@@ -309,6 +317,7 @@ export const GalleryPage: React.FC<IProps> = ({ gallery, add }) => {
         </div>
 
         <Tab.Content>
+          {/* 目测是 images 标签，里面是显示 GalleryImagesPanel，这一看就是显示图集的图片的界面 */}
           <Tab.Pane eventKey="images">
             <GalleryImagesPanel active={!add} gallery={gallery} />
           </Tab.Pane>
@@ -379,8 +388,11 @@ const GalleryLoader: React.FC<RouteComponentProps<IGalleryParams>> = ({
   match,
 }) => {
   const { id, tab } = match.params;
+  // 这里是获取图库信息，但是根据 console.log 显示，data 内并不包含图片信息，说明图片并不是跟随图集数据直接获取的
+  // 同时在图集内部图片上面有一个删不掉的 属于XX图集 的条件，可以推测出图集内部图片是后续搜索出来的
   const { data, loading, error } = useFindGallery(id);
 
+  // 滚动到顶部？
   useScrollToTopOnMount();
 
   if (loading) return <LoadingIndicator />;
@@ -394,6 +406,7 @@ const GalleryLoader: React.FC<RouteComponentProps<IGalleryParams>> = ({
 
   if (tab) {
     return (
+      // 这里在重定向，重定向到 id 的位置
       <Redirect
         to={{
           ...location,
@@ -403,6 +416,7 @@ const GalleryLoader: React.FC<RouteComponentProps<IGalleryParams>> = ({
     );
   }
 
+  // 这里在显示图集页面？
   return <GalleryPage gallery={data.findGallery} />;
 };
 

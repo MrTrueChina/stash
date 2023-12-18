@@ -129,6 +129,7 @@ export const GalleryList: React.FC<IGalleryList> = ({
       }
     }
 
+    // 渲染图集列表
     function renderGalleries() {
       if (!result.data?.findGalleries) return;
 

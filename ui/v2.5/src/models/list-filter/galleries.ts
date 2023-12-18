@@ -20,8 +20,10 @@ import {
 import { ListFilterOptions, MediaSortByOptions } from "./filter-options";
 import { DisplayMode } from "./types";
 
-const defaultSortBy = "path";
+// 原版的默认排序是路径，但这样顺序过于固定不利于查看新数据，改为按照日期排序
+const defaultSortBy = "date";
 
+// 排序窗口可选的排序字段
 const sortByOptions = ["date", ...MediaSortByOptions]
   .map(ListFilterOptions.createSortBy)
   .concat([
@@ -35,6 +37,7 @@ const sortByOptions = ["date", ...MediaSortByOptions]
     },
   ]);
 
+// 显示方式（方格、列表、照片墙）
 const displayModeOptions = [
   DisplayMode.Grid,
   DisplayMode.List,
